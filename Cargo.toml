@@ -1,0 +1,8 @@
+[package]
+name = "libfornix-neuralnetwork"
+version = "0.1.0"
+authors = ["Rene Eichhorn <rene.eichhorn@mni.thm.de>"]
+
+[dependencies]
+log = "0.3"
+libfornix = { path = "../libfornix/" }
