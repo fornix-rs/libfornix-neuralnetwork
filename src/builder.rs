@@ -4,6 +4,23 @@ use super::models::*;
 use libfornix::*;
 
 /// A builder pattern that allows building an neural network object
+///
+/// # Sample usage:
+///
+/// ## Creates a 2 layered nn that contains 3-2 trivial neurons
+///
+/// ```
+/// let mut rng = OsRandomNumberProvider::new().unwrap();
+///
+/// let network = NeuralNetworkBuilder::new(3, 1)
+///            .add_neuron(TrivialNeuron::create_initial(&mut rng))
+///            .add_neuron(TrivialNeuron::create_initial(&mut rng))
+///            .add_neuron(TrivialNeuron::create_initial(&mut rng))
+///        .next_layer()
+///            .add_neuron(TrivialNeuron::create_initial(&mut rng))
+///            .add_neuron(TrivialNeuron::create_initial(&mut rng))
+///        .create_directional(&mut rng);
+/// ```
 pub struct NeuralNetworkBuilder {
     layer: Layer,
     network: NeuralNetwork,

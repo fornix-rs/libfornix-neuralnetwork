@@ -57,18 +57,15 @@ impl Connection {
 ///
 /// The neural network is designed after the human brain in very abstract way.
 /// It's one of the simplest form and is easy to train.
+///
+/// The simplest way to construct a network is by using `NeuralNetworkBuilder`
+/// it is a builder pattern to construct the object.
 pub struct NeuralNetwork {
     /// Container for all layers
     pub layers: Vec<Layer>,
 }
 
 impl NeuralNetwork {
-    /*
-    pub fn new() -> Self {
-
-    }
-    */
-
     /// Gets a mutable reference to an neuron by specifying its location (layer_index, neuron_index)
     /// Returns `None` if location is out of range, see logs for detailed error message
     pub fn locate_mut(&mut self, location: (usize, usize)) -> Option<&mut Neuron> {
