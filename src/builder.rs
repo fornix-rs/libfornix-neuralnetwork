@@ -41,10 +41,20 @@ impl NeuralNetworkBuilder {
     }
 
     /// Creates a connection
-    pub fn connect(from: (usize, usize), to: (usize, usize), weight: f64) {
+    pub fn connect(mut self, from: (usize, usize), to: (usize, usize), weight: f64) -> Self {
+        match self.network.locate_mut(from) {
+            Some(neuron) => {
+                neuron.connections.push(Connection::new(weight, to))
+            },
+            None => {
+                error!("could not create a connection");
+            }
+        }
+        self
     }
 
     /// Creates the network by generating directional connections between layers with random weights
+    /// Connects each neuron with all neurons in the next layers
     pub fn create_directional(mut self, rng: &mut RandomNumberProvider) -> NeuralNetwork {
         // end current layer
         if self.layer.neurons.len() > 0 {
@@ -52,7 +62,12 @@ impl NeuralNetworkBuilder {
         }
 
         // create connections
-        for i in 0..self.network.layers.len() {
+        for i in 0..(self.network.layers.len() - 1) {
+            for j in 0..self.network.layers[i].neurons.len() {
+                for k in 0..self.network.layers[i + 1].neurons.len() {
+                    self = self.connect((i, j), (i + 1, k), rng.generate_number(-1.0, 1.0));
+                }
+            }
         }
 
         self.network

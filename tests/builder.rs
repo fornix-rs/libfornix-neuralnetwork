@@ -28,7 +28,6 @@ fn test_default_case() {
     assert_eq!(2, network.layers[1].neurons.len());
 
     // test connections
-    /*
     assert_eq!(2, network.layers[0].neurons[0].connections.len());
     assert_eq!((1, 0), network.layers[0].neurons[0].connections[0].link);
     assert_eq!((1, 1), network.layers[0].neurons[0].connections[1].link);
@@ -38,5 +37,4 @@ fn test_default_case() {
     assert_eq!(2, network.layers[0].neurons[2].connections.len());
     assert_eq!((1, 0), network.layers[0].neurons[2].connections[0].link);
     assert_eq!((1, 1), network.layers[0].neurons[2].connections[1].link);
-    */
 }

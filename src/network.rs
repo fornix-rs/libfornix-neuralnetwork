@@ -8,6 +8,7 @@ pub struct Layer {
 }
 
 impl Layer {
+    /// Creates an empty layer
     pub fn new() -> Self {
         Layer {
             neurons: Vec::new(),
@@ -41,6 +42,16 @@ pub struct Connection {
     pub link: (usize, usize),
 }
 
+impl Connection {
+    /// Quick initializer: creates a connection object with a weight and target
+    pub fn new(weight: f64, link: (usize, usize)) -> Self {
+        Connection {
+            weight: weight,
+            link: link,
+        }
+    }
+}
+
 /// A neural network is form of an intelligent program.
 /// As every intelligent program it takes inputs and gives outputs
 ///
@@ -58,7 +69,23 @@ impl NeuralNetwork {
     }
     */
 
-    /// Gets a reference to an neuron by specifying its location (layer_index, neuron_index)
+    /// Gets a mutable reference to an neuron by specifying its location (layer_index, neuron_index)
+    /// Returns `None` if location is out of range, see logs for detailed error message
+    pub fn locate_mut(&mut self, location: (usize, usize)) -> Option<&mut Neuron> {
+        if location.0 >= self.layers.len() {
+            error!("tried to access a layer that is out of range");
+            return None;
+        }
+
+        if location.1 >= self.layers[location.0].neurons.len() {
+            error!("tried to access a neuron that is out of range");
+            return None;
+        }
+
+        Some(&mut self.layers[location.0].neurons[location.1])
+    }
+
+    /// Gets a non-mutable reference to an neuron by specifying its location (layer_index, neuron_index)
     /// Returns `None` if location is out of range, see logs for detailed error message
     pub fn locate(&self, location: (usize, usize)) -> Option<&Neuron> {
         if location.0 >= self.layers.len() {
@@ -73,6 +100,4 @@ impl NeuralNetwork {
 
         Some(&self.layers[location.0].neurons[location.1])
     }
-
-
 }

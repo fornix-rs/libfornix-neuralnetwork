@@ -17,5 +17,7 @@ fn test_locate() {
     });
 
     assert!(testTarget.locate((10, 10)).is_none());
+    assert!(testTarget.locate_mut((10, 10)).is_none());
     assert!(testTarget.locate((0, 0)).is_some());
+    assert!(testTarget.locate_mut((0, 0)).is_some());
 }
