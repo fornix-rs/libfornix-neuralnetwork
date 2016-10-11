@@ -20,3 +20,21 @@ fn test_trivial() {
     let inputs = vec![1.0, 2.0, 3.0];
     assert_eq!(6.0 + bias, model.calculate(&inputs));
 }
+
+#[test]
+fn test_input() {
+    let mut neuron = InputNeuron {
+        value: 0.0,
+    };
+
+    assert_eq!(0.0, neuron.calculate(&vec![1.0, 2.0, 3.0]));
+    assert_eq!(0, neuron.tweakable_values().len());
+}
+
+#[test]
+fn test_output() {
+    let mut neuron = OutputNeuron {};
+
+    assert_eq!(6.0, neuron.calculate(&vec![1.0, 2.0, 3.0]));
+    assert_eq!(0, neuron.tweakable_values().len());
+}

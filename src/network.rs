@@ -1,3 +1,5 @@
+use libfornix::*;
+
 use super::*;
 
 /// Describes a layer in the neural network
@@ -98,3 +100,15 @@ impl NeuralNetwork {
         Some(&self.layers[location.0].neurons[location.1])
     }
 }
+
+/*
+impl IntelligentProgram for NeuralNetwork {
+    /// mutably executes the program
+    /// might modify itself or adjust internal memory
+    fn mut_execute(&mut self, input: &ProgramInputs) -> ProgramOutputs {
+    }
+
+    /// executed the program, without changing it's state
+    fn execute(&self, input: &ProgramInputs) -> ProgramOutputs;
+}
+*/

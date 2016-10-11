@@ -64,3 +64,42 @@ impl NeuronModel for TrivialNeuron {
         value + self.bias
     }
 }
+
+/// A Input neuron is used in the first layer, it will hold on value
+pub struct InputNeuron {
+   pub value: f64,
+}
+
+impl NeuronModel for InputNeuron {
+    fn calculate(&self, inputs: &Vec<f64>) -> f64 {
+        self.value
+    }
+}
+
+impl TrainableNeuronModel for InputNeuron {
+    fn tweakable_values<'a>(&'a mut self) -> Vec<(&'a mut f64, (f64, f64))> {
+        Vec::new()
+    }
+}
+
+/// An Output neuron is used in the last layer does not hold anything.
+/// It will only summarize its inputs
+pub struct OutputNeuron;
+
+impl NeuronModel for OutputNeuron {
+    fn calculate(&self, inputs: &Vec<f64>) -> f64 {
+        let mut value = 0.0;
+
+        for num in inputs {
+            value += *num;
+        }
+
+        value
+    }
+}
+
+impl TrainableNeuronModel for OutputNeuron {
+    fn tweakable_values<'a>(&'a mut self) -> Vec<(&'a mut f64, (f64, f64))> {
+        Vec::new()
+    }
+}

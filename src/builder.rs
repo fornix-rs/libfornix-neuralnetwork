@@ -24,6 +24,7 @@ use libfornix::*;
 pub struct NeuralNetworkBuilder {
     layer: Layer,
     network: NeuralNetwork,
+    outputs: usize,
 }
 
 impl NeuralNetworkBuilder {
@@ -31,12 +32,21 @@ impl NeuralNetworkBuilder {
     /// `inputs` - number of inputs
     /// `outputs` - number of outputs
     pub fn new(inputs: usize, outputs: usize) -> Self {
-        NeuralNetworkBuilder {
+        let mut builder = NeuralNetworkBuilder {
             layer: Layer::new(),
             network: NeuralNetwork {
                 layers: Vec::new(),
-            }
+            },
+            outputs: outputs,
+        };
+
+        for i in 0..inputs {
+            builder = builder.add_neuron(InputNeuron {
+                value: 0.0,
+            });
         }
+
+        builder.next_layer()
     }
 
     /// Finishes current layer
@@ -77,6 +87,12 @@ impl NeuralNetworkBuilder {
         if self.layer.neurons.len() > 0 {
             self = self.next_layer();
         }
+
+        // create outputs
+        for i in 0..self.outputs {
+            self = self.add_neuron(OutputNeuron {});
+        }
+        self = self.next_layer();
 
         // create connections
         for i in 0..(self.network.layers.len() - 1) {
