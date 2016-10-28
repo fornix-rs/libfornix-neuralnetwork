@@ -1,5 +1,7 @@
 use libfornix::*;
 
+use std::any::Any;
+
 /// An Neuron turns x inputs into y outputs.
 /// How these inputs are turned into outputs will be defined by this trait.
 pub trait NeuronModel {
@@ -20,6 +22,24 @@ pub trait NeuronModel {
     fn calculate_mut(&mut self, inputs: &Vec<f64>) -> f64 {
         self.calculate(inputs)
     }
+
+    /// Returns an instance to the any trait
+    /// This is required to access the actual implementation of NeuronModel later
+    fn as_any(&self) -> &Any;
+
+    /// Returns an instance to the any trait
+    /// This is required to access the actual implementation of NeuronModel later
+    fn as_mut_any(&mut self) -> &mut Any;
+
+    /// Returns an boxed clone of the neuron model
+    /// This is required to be able to clone the whole neural network later
+    fn boxed_clone(&self) -> Box<NeuronModel>;
+}
+
+impl Clone for Box<NeuronModel> {
+    fn clone(&self) -> Self {
+        self.boxed_clone()
+    }
 }
 
 /// A trainable neuron model is able to be adjusted
@@ -33,6 +53,7 @@ pub trait TrainableNeuronModel {
 
 /// The TrivialNeuron as its name suggests, is the simplest way of handling neurons
 /// It will calculate it's value by summing up all activated input values
+#[derive(Clone)]
 pub struct TrivialNeuron {
     pub bias: f64,
 }
@@ -63,9 +84,22 @@ impl NeuronModel for TrivialNeuron {
 
         value + self.bias
     }
+
+    fn as_any(&self) -> &Any {
+        self
+    }
+
+    fn as_mut_any(&mut self) -> &mut Any {
+        self
+    }
+
+    fn boxed_clone(&self) -> Box<NeuronModel> {
+        Box::new((*self).clone())
+    }
 }
 
 /// A Input neuron is used in the first layer, it will hold on value
+#[derive(Clone)]
 pub struct InputNeuron {
    pub value: f64,
 }
@@ -73,6 +107,18 @@ pub struct InputNeuron {
 impl NeuronModel for InputNeuron {
     fn calculate(&self, inputs: &Vec<f64>) -> f64 {
         self.value
+    }
+
+    fn as_any(&self) -> &Any {
+        self
+    }
+
+    fn as_mut_any(&mut self) -> &mut Any {
+        self
+    }
+
+    fn boxed_clone(&self) -> Box<NeuronModel> {
+        Box::new((*self).clone())
     }
 }
 
@@ -84,6 +130,7 @@ impl TrainableNeuronModel for InputNeuron {
 
 /// An Output neuron is used in the last layer does not hold anything.
 /// It will only summarize its inputs
+#[derive(Clone)]
 pub struct OutputNeuron;
 
 impl NeuronModel for OutputNeuron {
@@ -95,6 +142,18 @@ impl NeuronModel for OutputNeuron {
         }
 
         value
+    }
+
+    fn as_any(&self) -> &Any {
+        self
+    }
+
+    fn as_mut_any(&mut self) -> &mut Any {
+        self
+    }
+
+    fn boxed_clone(&self) -> Box<NeuronModel> {
+        Box::new((*self).clone())
     }
 }
 
